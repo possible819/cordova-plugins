@@ -1,0 +1,17 @@
+{
+  "name": "custom-plugin-alert",
+  "version": "1.0.0",
+  "description": "Custom Alert Plugin",
+  "cordova": {
+    "id": "custom-plugin-alert",
+    "platforms": [
+      "ios"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-ios"
+  ],
+  "author": "Jay Lee <jaylee.possible@gmail.com>",
+  "license": "ISC"
+}
