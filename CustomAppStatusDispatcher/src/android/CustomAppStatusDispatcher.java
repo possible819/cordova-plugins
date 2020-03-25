@@ -6,7 +6,7 @@ import android.app.Activity;
 public class CustomAppStatusDispatcher extends CordovaPlugin {
     @Override
     public void onResume(boolean multitasking) {
-        this.webView.sendJavascript();
+        // this.webView.sendJavascript();
     }
 
     @Override
