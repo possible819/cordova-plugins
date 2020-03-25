@@ -1,2 +1,24 @@
-<?xml version='1.0' encoding='utf-8'?>
-<plugin id="custom-plugin-app-status-dispatcher" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"><name>CustomAppStatusDispatcher</name><js-module name="CustomAppStatusDispatcher" src="www/CustomAppStatusDispatcher.js"><clobbers target="cordova.plugins.CustomAppStatusDispatcher" /></js-module><platform name="ios"><config-file parent="/*" target="config.xml"><feature name="CustomAppStatusDispatcher"><param name="ios-package" value="CustomAppStatusDispatcher" /></feature></config-file><source-file src="src/ios/CustomAppStatusDispatcher.m" /></platform></plugin>
+<?xml version="1.0" encoding="utf-8" ?>
+<plugin id="custom-plugin-app-status-dispatcher" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>CustomAppStatusDispatcher</name>
+  <js-module name="CustomAppStatusDispatcher" src="www/CustomAppStatusDispatcher.js">
+    <clobbers target="cordova.plugins.CustomAppStatusDispatcher" />
+  </js-module>
+  <platform name="ios">
+    <config-file parent="/*" target="config.xml">
+      <feature name="CustomAppStatusDispatcher">
+        <param name="ios-package" value="CustomAppStatusDispatcher" />
+      </feature>
+    </config-file>
+    <source-file src="src/ios/CustomAppStatusDispatcher.m" />
+  </platform>
+  <platform name="android">
+    <config-file parent="/*" target="res/xml/config.xml">
+      <feature name="CustomAppStatusDispatcher">
+        <param name="android-package" value="custom.plugin.app.status.dispatcher.CustomAppStatusDispatcher" />
+      </feature>
+    </config-file>
+    <config-file parent="/*" target="AndroidManifest.xml"></config-file>
+    <source-file src="src/android/CustomAppStatusDispatcher.java" target-dir="src/custom-plugin-app-status-dispatcher/CustomAppStatusDispatcher" />
+  </platform>
+</plugin>

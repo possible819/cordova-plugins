@@ -1,2 +1,24 @@
-<?xml version='1.0' encoding='utf-8'?>
-<plugin id="custom-plugin-alert" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android"><name>CustomAlert</name><js-module name="CustomAlert" src="www/CustomAlert.js"><clobbers target="cordova.plugins.CustomAlert" /></js-module><platform name="ios"><config-file parent="/*" target="config.xml"><feature name="CustomAlert"><param name="ios-package" value="CustomAlert" /></feature></config-file><source-file src="src/ios/CustomAlert.m" /></platform><platform name="android"><config-file parent="/*" target="res/xml/config.xml"><feature name="CustomAlert"><param name="android-package" value="custom-plugin-alert.CustomAlert" /></feature></config-file><config-file parent="/*" target="AndroidManifest.xml"></config-file><source-file src="src/android/CustomAlert.java" target-dir="src/custom-plugin-alert/CustomAlert" /></platform></plugin>
+<?xml version="1.0" encoding="utf-8" ?>
+<plugin id="custom-plugin-alert" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+  <name>CustomAlert</name>
+  <js-module name="CustomAlert" src="www/CustomAlert.js">
+    <clobbers target="cordova.plugins.CustomAlert" />
+  </js-module>
+  <platform name="ios">
+    <config-file parent="/*" target="config.xml">
+      <feature name="CustomAlert">
+        <param name="ios-package" value="CustomAlert" />
+      </feature>
+    </config-file>
+    <source-file src="src/ios/CustomAlert.m" />
+  </platform>
+  <platform name="android">
+    <config-file parent="/*" target="res/xml/config.xml">
+      <feature name="CustomAlert">
+        <param name="android-package" value="custom-plugin-alert.CustomAlert" />
+      </feature>
+    </config-file>
+    <config-file parent="/*" target="AndroidManifest.xml"></config-file>
+    <source-file src="src/android/CustomAlert.java" target-dir="src/custom-plugin-alert/CustomAlert" />
+  </platform>
+</plugin>
