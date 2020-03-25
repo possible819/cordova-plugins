@@ -9,12 +9,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 
 public class CustomAlert extends CordovaPlugin {
-    private static final String ACTION_DISMISS_ALERT = "dismissAlert";
-
     private static final String BUTTON_TYPE_DEFAULT = "DEFAULT";
     private static final String BUTTON_TYPE_CANCEL = "CANCEL";
     private static final String BUTTON_TYPE_DESTRUCTIVE = "DESTRUCTIVE";
@@ -36,11 +33,11 @@ public class CustomAlert extends CordovaPlugin {
         return result;
     }
 
-    private void alert(String title, String message, JSONArray buttons, final CallbackContext callbackContext)
-            throws JSONException {
+    private void alert(String title, String message, JSONArray buttons, final CallbackContext callbackContext) throws JSONException {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.cordova.getActivity());
-        if (!title.isEmpty())
+        if (!title.isEmpty()) {
             builder.setTitle(title);
+        }
         builder.setMessage(message);
 
         for (int i = 0; i < buttons.length(); i++) {
@@ -54,11 +51,9 @@ public class CustomAlert extends CordovaPlugin {
                         public void onClick(DialogInterface dialog, int idx) {
                             dialog.dismiss();
                             callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, name));
-
                         }
                     });
                     break;
-
                 case BUTTON_TYPE_CANCEL:
                     builder.setNeutralButton(name, new AlertDialog.OnClickListener() {
                         public void onClick(DialogInterface dialog, int idx) {
@@ -79,7 +74,7 @@ public class CustomAlert extends CordovaPlugin {
                     break;
 
                 default:
-                    callbackContext.error("Button type " + type + " is available.");
+                    callbackContext.error("Button type " + type + " is not available.");
             }
         }
 
