@@ -39,15 +39,15 @@ public class CustomLocalNotification extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.context = this.cordova.getContext();
-        this.contentTitle = args.getString(0);
+        this.callbackContext = callbackContext;
         boolean result = false;
 
         if (action.equals(ACTION_TYPE_ADD)) {
+            this.contentTitle = args.getString(0);
             this.subText = args.getString(1);
             this.contentText = args.getString(2);
             this.hour = args.getInt(3);
             this.minute = args.getInt(4);
-            this.callbackContext = callbackContext;
 
             this.addNotification();
             result = true;
