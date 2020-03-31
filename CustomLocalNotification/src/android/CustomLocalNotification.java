@@ -4,6 +4,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -63,8 +65,9 @@ public class CustomLocalNotification extends CordovaPlugin {
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
-                pendingIntent);
+        // alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+        // calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);
 
     }
 
@@ -86,11 +89,21 @@ public class CustomLocalNotification extends CordovaPlugin {
     }
 
     private Intent getIntent(String title, String subText, String text) {
+        this.setSharedPreferences(this.cordova.getContext(), title, subText, text);
         Intent intent = new Intent(this.cordova.getContext(), NotificationReceiver.class);
         intent.putExtra("title", title);
         intent.putExtra("subText", subText);
         intent.putExtra("text", text);
 
         return intent;
+    }
+
+    private void setSharedPreferences(Context context, String title, String subText, String text) {
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = appPreferences.edit();
+        editor.putString("title", title);
+        editor.putString("subText", subText);
+        editor.putString("text", text);
+        editor.commit();
     }
 }

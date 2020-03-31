@@ -18,8 +18,19 @@
         <param name="android-package" value="custom.plugin.local.notification.CustomLocalNotification" />
       </feature>
     </config-file>
-    <config-file parent="/*" target="AndroidManifest.xml"></config-file>
+    <config-file parent="/*/application" target="AndroidManifest.xml">
+      <receiver android:exported="false" android:enabled="true" android:permission="android.permission.RECEIVE_BOOT_COMPLETED" android:name="custom.plugin.local.notification.NotificationReceiver">
+        <intent-filter>
+          <action android:name="android.intent.action.BOOT_COMPLETED" />
+        </intent-filter>
+      </receiver>
+    </config-file>
+    <config-file parent="/*" target="AndroidManifest.xml">
+      <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+      <uses-permission android:name="android.permission.VIBRATE" />
+    </config-file>
     <source-file src="src/android/CustomLocalNotification.java" target-dir="src/custom/plugin/local/notification" />
+    <source-file src="src/android/NotificationReceiver.java" target-dir="src/custom/plugin/local/notification" />
     <framework src="androidx.core:core:1.1.0" />
   </platform>
 </plugin>
