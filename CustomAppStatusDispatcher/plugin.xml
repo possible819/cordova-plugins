@@ -19,6 +19,6 @@
       </feature>
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml"></config-file>
-    <source-file src="src/android/CustomAppStatusDispatcher.java" target-dir="src/custom/plugin/app/status/dispatcher/CustomAppStatusDispatcher" />
+    <source-file src="src/android/CustomAppStatusDispatcher.java" target-dir="src/custom/plugin/app/status/dispatcher" />
   </platform>
 </plugin>

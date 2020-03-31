@@ -19,7 +19,7 @@
       </feature>
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml"></config-file>
-    <source-file src="src/android/CustomLocalNotification.java" target-dir="src/custom/plugin/local/notification/CustomLocalNotification" />
+    <source-file src="src/android/CustomLocalNotification.java" target-dir="src/custom/plugin/local/notification" />
     <framework src="androidx.core:core:1.1.0" />
   </platform>
 </plugin>
