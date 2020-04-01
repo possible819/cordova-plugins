@@ -37,6 +37,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         CustomLocalNotification customLocalNotification = new CustomLocalNotification(context, title, subText, text,
             hour, minute);
         customLocalNotification.addNotification();
+      } else {
+        return;
       }
     } else {
       title = intent.getStringExtra("title");
