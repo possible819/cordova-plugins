@@ -19,7 +19,7 @@
       </feature>
     </config-file>
     <config-file parent="/*/application" target="AndroidManifest.xml">
-      <receiver android:exported="false" android:enabled="true" android:permission="android.permission.RECEIVE_BOOT_COMPLETED" android:name="custom.plugin.local.notification.NotificationReceiver">
+      <receiver android:exported="false" android:enabled="true" android:name="custom.plugin.local.notification.NotificationReceiver">
         <intent-filter>
           <action android:name="android.intent.action.BOOT_COMPLETED" />
         </intent-filter>

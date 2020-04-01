@@ -21,20 +21,27 @@ public class NotificationReceiver extends BroadcastReceiver {
 
   @Override
   public void onReceive(Context context, Intent intent) {
-    String title = intent.getStringExtra("title");
-    String subText = intent.getStringExtra("subText");
-    String text = intent.getStringExtra("text");
+    String title;
+    String subText;
+    String text;
 
-    if (title.isEmpty()) {
-      title = this.getSharedPreference(context, "title");
-    }
+    if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+      SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+      title = appPreferences.getString("title", "");
+      subText = appPreferences.getString("subText", "");
+      text = appPreferences.getString("text", "");
+      int hour = appPreferences.getInt("hour", 999);
+      int minute = appPreferences.getInt("minute", 999);
 
-    if (subText.isEmpty()) {
-      subText = this.getSharedPreference(context, "subText");
-    }
-
-    if (text.isEmpty()) {
-      text = this.getSharedPreference(context, "text");
+      if (!title.equals("") && !subText.equals("") && !text.equals("") && hour != 999 && minute != 999) {
+        CustomLocalNotification customLocalNotification = new CustomLocalNotification(context, title, subText, text,
+            hour, minute);
+        customLocalNotification.addNotification();
+      }
+    } else {
+      title = intent.getStringExtra("title");
+      subText = intent.getStringExtra("subText");
+      text = intent.getStringExtra("text");
     }
 
     NotificationManager notificationManager = (NotificationManager) context
@@ -45,19 +52,14 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
         .setSmallIcon(android.R.drawable.ic_menu_edit).setContentTitle(title).setSubText(subText).setContentText(text)
-        .setPriority(NotificationCompat.PRIORITY_DEFAULT).setContentIntent(pContentIntent);
+        .setPriority(NotificationCompat.PRIORITY_HIGH).setContentIntent(pContentIntent).setAutoCancel(true);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, CHANNEL_NAME,
-          NotificationManager.IMPORTANCE_DEFAULT);
+          NotificationManager.IMPORTANCE_HIGH);
       notificationManager.createNotificationChannel(channel);
     }
 
     notificationManager.notify(NOTIFICATION_ID, builder.build());
-  }
-
-  private String getSharedPreference(Context context, String key) {
-    SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-    return appPreferences.getString(key, "");
   }
 }

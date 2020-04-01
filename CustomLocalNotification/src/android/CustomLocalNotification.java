@@ -21,76 +21,87 @@ public class CustomLocalNotification extends CordovaPlugin {
     private final int REQUEST_CODE = 0;
     private final int INTENT_FLAG = PendingIntent.FLAG_UPDATE_CURRENT;
 
+    private Context context;
+    private String title;
+    private String subText;
+    private String text;
+    private int hour;
+    private int minute;
+
+    public CustomLocalNotification() {
+    }
+
+    public CustomLocalNotification(Context context, String title, String subText, String text, int hour, int minute) {
+        this.context = context;
+        this.title = title;
+        this.subText = subText;
+        this.text = text;
+        this.hour = hour;
+        this.minute = minute;
+    }
+
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         boolean result = false;
-        if (action.equals(ACTION_TYPE_ADD)) {
-            String title = args.getString(0);
-            String subText = args.getString(1);
-            String text = args.getString(2);
-            int hour = args.getInt(3);
-            int minute = args.getInt(4);
+        this.context = this.cordova.getContext();
 
-            this.addNotification(title, subText, text, hour, minute, callbackContext);
-            result = true;
-        } else if (action.equals(ACTION_TYPE_CLEAR)) {
-            this.clearNotification(callbackContext);
-            result = true;
-        } else {
-            callbackContext.error("Failed to find action " + action);
-        }
-
-        return result;
-    }
-
-    private void addNotification(String title, String subText, String text, int hour, int minute,
-            CallbackContext callbackContext) {
         try {
-            this.registerNotification(title, subText, text, hour, minute);
+            if (action.equals(ACTION_TYPE_ADD)) {
+                this.title = args.getString(0);
+                this.subText = args.getString(1);
+                this.text = args.getString(2);
+                this.hour = args.getInt(3);
+                this.minute = args.getInt(4);
+
+                this.addNotification();
+            } else if (action.equals(ACTION_TYPE_CLEAR)) {
+                this.clearNotification();
+            }
             callbackContext.success();
+            result = true;
         } catch (Exception e) {
             callbackContext.error(e.getMessage());
+        } finally {
+            return result;
         }
     }
 
-    private void registerNotification(String title, String subText, String text, int hour, int minute) {
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.cordova.getContext(), this.REQUEST_CODE,
-                this.getIntent(title, subText, text), this.INTENT_FLAG);
-        AlarmManager alarmManager = (AlarmManager) this.cordova.getContext().getSystemService(Context.ALARM_SERVICE);
+    protected void addNotification() {
+        this.setSharedPreferences();
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, this.REQUEST_CODE,
+                this.getIntent(this.title, this.subText, this.text), this.INTENT_FLAG);
+        AlarmManager alarmManager = (AlarmManager) this.context.getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.HOUR_OF_DAY, this.hour);
+        calendar.set(Calendar.MINUTE, this.minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);
 
-        // alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
-        // calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 60 * 1000, pendingIntent);
-
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
+                pendingIntent);
     }
 
-    private void clearNotification(CallbackContext callbackContext) {
+    private void clearNotification() {
         try {
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.cordova.getContext(), this.REQUEST_CODE,
-                    this.getIntent(), this.INTENT_FLAG);
-            AlarmManager alarmManager = (AlarmManager) this.cordova.getContext()
-                    .getSystemService(Context.ALARM_SERVICE);
+            this.clearSharedPreferences();
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this.context, this.REQUEST_CODE, this.getIntent(),
+                    this.INTENT_FLAG);
+            AlarmManager alarmManager = (AlarmManager) this.context.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(pendingIntent);
-            callbackContext.success();
         } catch (Exception e) {
-            callbackContext.error(e.getMessage());
+            throw e;
         }
     }
 
     private Intent getIntent() {
-        return new Intent(this.cordova.getContext(), NotificationReceiver.class);
+        return new Intent(this.context, NotificationReceiver.class);
     }
 
     private Intent getIntent(String title, String subText, String text) {
-        this.setSharedPreferences(this.cordova.getContext(), title, subText, text);
-        Intent intent = new Intent(this.cordova.getContext(), NotificationReceiver.class);
+        Intent intent = new Intent(this.context, NotificationReceiver.class);
         intent.putExtra("title", title);
         intent.putExtra("subText", subText);
         intent.putExtra("text", text);
@@ -98,12 +109,19 @@ public class CustomLocalNotification extends CordovaPlugin {
         return intent;
     }
 
-    private void setSharedPreferences(Context context, String title, String subText, String text) {
-        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    private void setSharedPreferences() {
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this.context);
         SharedPreferences.Editor editor = appPreferences.edit();
-        editor.putString("title", title);
-        editor.putString("subText", subText);
-        editor.putString("text", text);
+        editor.putString("title", this.title);
+        editor.putString("subText", this.subText);
+        editor.putString("text", this.text);
+        editor.putInt("hour", this.hour);
+        editor.putInt("minute", this.minute);
         editor.commit();
+    }
+
+    private void clearSharedPreferences() {
+        SharedPreferences appPreferences = PreferenceManager.getDefaultSharedPreferences(this.context);
+        appPreferences.edit().clear().commit();
     }
 }
