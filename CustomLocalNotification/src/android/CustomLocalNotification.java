@@ -78,7 +78,6 @@ public class CustomLocalNotification extends CordovaPlugin {
         calendar.set(Calendar.MINUTE, this.minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 10);
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY,
                 pendingIntent);
